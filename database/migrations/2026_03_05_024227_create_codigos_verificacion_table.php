@@ -12,22 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('codigos_verificacion', function (Blueprint $table) {
-            $table->increments('id')->primaryKey();
+            $table->increments('id');
 
-            // Relación con el usuario
+    // Relación con el usuario (quien pide el código)
     $table->integer('id_usuario')->unsigned();
     $table->foreign('id_usuario')->references('id')->on('usuarios')->onDelete('cascade');
     
-    // El Código (Ej: "892103")
-    $table->string('codigo', 10);
+    // Datos del código
+    $table->string('codigo', 10); // El PIN generado
+    $table->string('metodo', 15); // 'email', 'sms' o 'whatsapp'
     
-    // Para saber por dónde se envió ('email' o 'sms')
-    $table->string('metodo', 10); 
-    
-    // Seguridad: Cuándo caduca este código (Ej: 10 min después de crearlo)
-    $table->timestamp('expira_en');
+    // Seguridad
+    $table->timestamp('expira_en'); // Cuándo deja de servir el código
+    $table->boolean('usado')->default(false); // Para que no usen el mismo código dos veces
 
-            $table->timestamps();
+    $table->timestamps();
         });
     }
 
