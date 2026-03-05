@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('detalle_pedidos', function (Blueprint $table) {
+            $table->increments('id')->primaryKey();
+
+                $table->integer('id_pedido')->unsigned();
+                $table->foreign('id_pedido')->references('id')->on('pedidos')->onDelete('cascade');
+
+                $table->integer('id_material')->unsigned();
+                $table->foreign('id_material')->references('id')->on('materiales')->onDelete('cascade');
+
+                $table->integer('cantidad'); // 100 Sillas
+    $table->decimal('precio_unitario', 10, 2); // Se guarda el precio histórico
+    $table->decimal('subtotal', 10, 2); // cantidad * precio
+
+
+
+
+
+
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('detalle_pedidos');
+    }
+};
